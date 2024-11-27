@@ -10,7 +10,7 @@ public class AnalyticsService {
         return null;
     }
 
-    public List<ProductHistory> retrieveHistoryOfProduct(long l) {
+    public List<ProductHistory> retrieveHistoryOfProduct(long productId) {
         return null;
     }
 }

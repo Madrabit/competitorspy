@@ -1,7 +1,9 @@
 package ru.madrabit.competitorspy.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,6 +30,12 @@ public class AnalyticsControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @BeforeEach
+    void setUp() {
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    }
 
     @Test
     void whenRetrieveProductsPopularityThenReturnTopPopularProducts() throws Exception {
@@ -59,7 +67,7 @@ public class AnalyticsControllerTest {
                         20990)
         );
         when(service.retrieveHistoryOfProduct(1l)).thenReturn(productHistory);
-        mockMvc.perform(MockMvcRequestBuilders.get("/analytics/products/{1}/history/"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/analytics/products/{productId}/history/", 1l))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(productHistory)));
     }

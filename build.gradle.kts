@@ -32,6 +32,7 @@ dependencies {
 	implementation ("org.seleniumhq.selenium:selenium-java:4.26.0")
 	implementation ("org.springframework.data:spring-data-mongodb:4.4.0")
 	implementation ("io.github.bonigarcia:webdrivermanager:5.5.3")
+	implementation ("jakarta.validation:jakarta.validation-api:3.0.2")
 
 }
 
