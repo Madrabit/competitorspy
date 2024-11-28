@@ -10,9 +10,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.madrabit.competitorspy.dto.SubscribeDTOReq;
 import ru.madrabit.competitorspy.dto.SubscribeDTOResp;
-import ru.madrabit.competitorspy.dto.SubscribesDTOResp;
 import ru.madrabit.competitorspy.entity.Product;
-import ru.madrabit.competitorspy.entity.Subcribes;
+import ru.madrabit.competitorspy.entity.Subscribes;
 import ru.madrabit.competitorspy.service.SubscribeService;
 
 import java.util.Collections;
@@ -45,7 +44,7 @@ public class SubscribeControllerTest {
     public void whenSelectProductReturnUpdates() throws Exception {
         SubscribeDTOReq req = new SubscribeDTOReq(1l, List.of(1,2,3));
         SubscribeDTOResp resp = new SubscribeDTOResp(123, Product.builder().id(1).build(), "success" );
-        when(service.subscribe(Collections.singletonList(req))).thenReturn(resp);
+        when(service.subscribe(1l, List.of(1,2,3))).thenReturn(resp);
         mockMvc.perform(MockMvcRequestBuilders.post("/subscribe/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
@@ -60,12 +59,11 @@ public class SubscribeControllerTest {
      */
     @Test
     public void whenChooseEmplThenReturnSubscribes() throws Exception {
-        Subcribes mockSubcribes = new Subcribes(123l, Collections.singletonList(Product.builder().id(1).name("ПОДФТ").build()));
-        SubscribesDTOResp dtoResp = new SubscribesDTOResp(mockSubcribes);
-        when(service.getSubscribes(1L)).thenReturn(mockSubcribes);
-        mockMvc.perform(MockMvcRequestBuilders.get("/subscribe/").queryParam("empId", "1"))
+        Subscribes mockSubscribes = new Subscribes(123l, Collections.singletonList(Product.builder().id(1).name("ПОДФТ").build()));
+        when(service.getSubscribes(1L)).thenReturn(mockSubscribes);
+        mockMvc.perform(MockMvcRequestBuilders.get("/subscribe/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(dtoResp)));
+                .andExpect(content().json(objectMapper.writeValueAsString(mockSubscribes)));
 
     }
 }

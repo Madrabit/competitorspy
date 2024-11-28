@@ -10,13 +10,14 @@ import ru.madrabit.competitorspy.config.SeleniumHandler;
 public class CompetitorSpyApplication {
 
     public static void main(String[] args) {
-        SeleniumHandler seleniumHandler = new SeleniumHandler();
-        seleniumHandler.start(false);
-        seleniumHandler.openPage("https://isbd.ru");
-        log.info("Opened main page: {}", "https://isbd.ru");
-        String pageSource = seleniumHandler.getPageSource();
-        System.out.println(pageSource);
-        seleniumHandler.stop();
+//        SeleniumHandler seleniumHandler = new SeleniumHandler();
+//        seleniumHandler.start(false);
+//        seleniumHandler.openPage("https://isbd.ru");
+//        log.info("Opened main page: {}", "https://isbd.ru");
+//        String pageSource = seleniumHandler.getPageSource();
+//
+//        System.out.println(pageSource);
+//        seleniumHandler.stop();
         SpringApplication.run(CompetitorSpyApplication.class, args);
     }
 

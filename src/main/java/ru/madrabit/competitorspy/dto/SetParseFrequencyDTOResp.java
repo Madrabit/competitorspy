@@ -1,4 +1,6 @@
 package ru.madrabit.competitorspy.dto;
 
-public record SetParseFrequencyDTOResp(int frequency) {
+import org.checkerframework.checker.index.qual.Positive;
+
+public record SetParseFrequencyDTOResp(@Positive int frequency) {
 }

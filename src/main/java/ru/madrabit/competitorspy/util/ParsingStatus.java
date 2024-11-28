@@ -5,4 +5,5 @@ public enum ParsingStatus {
     IN_PROGRESS,
     NOT_STARTED,
     FINISHED
+
 }

@@ -16,12 +16,11 @@ import ru.madrabit.competitorspy.service.AccountService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/account/")
+@RequestMapping("/account")
 @RequiredArgsConstructor
-@Validated
 public class AccountController {
     private final AccountService accountService;
-    @PostMapping("notifications")
+    @PostMapping("/notifications")
     public ResponseEntity<SubscribeNewProductsDTOResp> subscribeNewProducts(@RequestParam @Positive long userId) {
         if(userId < 0 || !accountService.isUserExists(userId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SubscribeNewProductsDTOResp("Пользователь не найден", false));

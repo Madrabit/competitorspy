@@ -13,7 +13,7 @@ public class ProductService {
         return null;
     }
 
-    public ProductProgramDTOResp getProgam(long l) {
+    public ProductProgramDTOResp getProgamById(long l) {
         return null;
     }
 

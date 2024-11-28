@@ -11,8 +11,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.madrabit.competitorspy.dto.LogsDTOResp;
+import ru.madrabit.competitorspy.dto.ParserStatusDTOResp;
 import ru.madrabit.competitorspy.dto.SetParseFrequencyDTOResp;
-import ru.madrabit.competitorspy.service.ParserService;
+import ru.madrabit.competitorspy.parser.ParserService;
+import ru.madrabit.competitorspy.service.ParserAdminService;
 import ru.madrabit.competitorspy.util.ParsingStatus;
 
 import java.time.LocalDateTime;
@@ -24,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ParserAdminController.class)
 public class ParserAdminControllerTest {
     @MockBean
-    ParserService service;
+    ParserAdminService service;
 
     @Autowired
     MockMvc mockMvc;
@@ -43,8 +45,7 @@ public class ParserAdminControllerTest {
     public void whenSetParsingFrequencyThenParseAfter2hours() throws Exception {
         SetParseFrequencyDTOResp dtoResp = new SetParseFrequencyDTOResp(2);
         when(service.setFrequency(2)).thenReturn(dtoResp);
-        mockMvc.perform(MockMvcRequestBuilders.get("/parser/admin/")
-                        .param("frequency", "2"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/parser/admin/frequency/{hours}"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(dtoResp)));
     }
@@ -55,12 +56,12 @@ public class ParserAdminControllerTest {
     * */
     @Test
     public void whenPressStartParseImmediately() throws Exception {
-        when(service.startParsing(true)).thenReturn("Парсер запущен");
+        ParserStatusDTOResp dtoResp = new ParserStatusDTOResp("Парсер запущен", ParsingStatus.START);
+        when(service.startParsing()).thenReturn(dtoResp);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/parser/admin/start")
-                        .param("start", "true"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/parser/admin/start"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Парсер запущен"));
+                .andExpect(content().json(objectMapper.writeValueAsString(dtoResp)));
     }
 
     /*
@@ -69,10 +70,11 @@ public class ParserAdminControllerTest {
      */
     @Test
     public void whenCheckStatusThenReturnInProgress() throws Exception {
-        when(service.checkStatus()).thenReturn(ParsingStatus.IN_PROGRESS);
+        ParserStatusDTOResp dtoResp = new ParserStatusDTOResp("Статус парсинга", ParsingStatus.IN_PROGRESS);
+        when(service.checkStatus()).thenReturn(dtoResp);
         mockMvc.perform(MockMvcRequestBuilders.get("/parser/admin/status"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("IN_PROGRESS"));
+                .andExpect(content().json(objectMapper.writeValueAsString(dtoResp)));
     }
 
     /*

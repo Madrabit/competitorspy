@@ -1,6 +1,5 @@
 package ru.madrabit.competitorspy.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -74,7 +73,7 @@ public class ProductControllerTest {
         when(service.getAll()).thenReturn(mockProducts);
         mockMvc.perform(MockMvcRequestBuilders.get("/products/"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(product)));
+                .andExpect(content().json(objectMapper.writeValueAsString(mockProducts)));
 
     }
 
@@ -84,7 +83,7 @@ public class ProductControllerTest {
     @Test
     public void retrieveProgramByProductId() throws Exception {
         ProductProgramDTOResp dtoResp = new ProductProgramDTOResp(product, programActual, programPrev);
-        when(service.getProgam(1l)).thenReturn(dtoResp);
+        when(service.getProgamById(1l)).thenReturn(dtoResp);
         mockMvc.perform(MockMvcRequestBuilders.get("/products/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(dtoResp)));
@@ -95,9 +94,9 @@ public class ProductControllerTest {
         List<Product> mockProducts = List.of(product);
         Page<Product> mockPage = new PageImpl<>(mockProducts);
         when(service.getProductPaginated(2,20)).thenReturn(mockPage);
-        mockMvc.perform(MockMvcRequestBuilders.get("/products/?page=2&size=20"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/products/paginated?page=2&size=20"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(product)));
+                .andExpect(content().json(objectMapper.writeValueAsString(mockPage)));
 
     }
 }

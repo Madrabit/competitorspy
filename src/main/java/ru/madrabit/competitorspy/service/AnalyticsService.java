@@ -1,9 +1,11 @@
 package ru.madrabit.competitorspy.service;
 
+import org.springframework.stereotype.Service;
 import ru.madrabit.competitorspy.entity.ProductHistory;
 
 import java.util.List;
 
+@Service
 public class AnalyticsService {
 
     public List<ProductHistory> retrieveTopPopular() {

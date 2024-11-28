@@ -2,21 +2,22 @@ package ru.madrabit.competitorspy.service;
 
 import org.springframework.stereotype.Service;
 import ru.madrabit.competitorspy.dto.LogsDTOResp;
+import ru.madrabit.competitorspy.dto.ParserStatusDTOResp;
 import ru.madrabit.competitorspy.dto.SetParseFrequencyDTOResp;
 import ru.madrabit.competitorspy.util.ParsingStatus;
 
 @Service
-public class ParserService {
+public class ParserAdminService {
 
     public SetParseFrequencyDTOResp setFrequency(int i) {
         return null;
     }
 
-    public String startParsing(boolean isStarted) {
-        return "";
+    public ParserStatusDTOResp startParsing() {
+        return null;
     }
 
-    public ParsingStatus checkStatus() {
+    public ParserStatusDTOResp checkStatus() {
         return null;
     }
 

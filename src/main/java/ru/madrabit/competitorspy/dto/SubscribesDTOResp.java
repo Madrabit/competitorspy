@@ -1,6 +1,6 @@
 package ru.madrabit.competitorspy.dto;
 
-import ru.madrabit.competitorspy.entity.Subcribes;
+import ru.madrabit.competitorspy.entity.Subscribes;
 
-public record SubscribesDTOResp(Subcribes subcribes) {
+public record SubscribesDTOResp(Subscribes subscribes) {
 }

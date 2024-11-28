@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.List;
 
 /**
  * Basic Selenium methods: start, stop, getElement and etc.
@@ -24,14 +25,16 @@ import java.time.Duration;
 @EqualsAndHashCode
 public class SeleniumHandler {
 
-    private WebDriver driver;
+    public WebDriver driver;
     private Wait<WebDriver> wait;
     public static final Duration WAIT_TIME_MAX = Duration.ofNanos(2000); // That number calculated empirically. Affect scraper performance.
 
-    public boolean start(boolean headlessMode) {
+    public boolean start() {
         try {
-            driver = getChromeDriver(headlessMode);
-            wait = new WebDriverWait(driver, WAIT_TIME_MAX);
+            if (driver == null) {
+                driver = getChromeDriver(true);
+                wait = new WebDriverWait(driver, WAIT_TIME_MAX);
+            }
         } catch (Exception e) {
             log.error("Driver was not initialized: {}", e.getMessage());
             return false;
@@ -49,7 +52,13 @@ public class SeleniumHandler {
 
     public void stop() {
         if (driver != null) {
-            driver.quit();
+            try {
+                driver.quit();
+            } catch (Exception e) {
+                log.error("Error while stopping WebDriver: {}", e.getMessage());
+            } finally {
+                driver = null;
+            }
         }
     }
 
@@ -58,9 +67,7 @@ public class SeleniumHandler {
     }
 
     private WebDriver getChromeDriver(boolean headlessMode) {
-//        ChromeConfig.setDriverPath();
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
         return new ChromeDriver(ChromeConfig.getChromeOptions(headlessMode));
     }
 
@@ -76,7 +83,8 @@ public class SeleniumHandler {
     public WebElement getElement(String path) {
         WebElement element = null;
         try {
-           element = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(path)));
+           WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+           element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(path)));
         }  catch (Exception e) {
             log.info("NO such element: {}", path);
         }

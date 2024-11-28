@@ -14,9 +14,10 @@ public class ChromeConfig {
         ChromeOptions options = new ChromeOptions()
                 .addArguments("--lang=ru")
                 .addArguments("start-maximized");
-
         if (headlessMode) {
             options.addArguments("--headless");
+            options.addArguments("--disable-gpu");
+
         }
         return options;
 
